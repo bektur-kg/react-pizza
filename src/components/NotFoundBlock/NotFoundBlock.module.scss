@@ -1,0 +1,22 @@
+.root{
+  display: flex;
+  padding: 3rem;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+
+  span{
+    svg{
+      font-size: 65px;
+
+    }
+  }
+
+  h1{
+    font-size: 34px;
+  }
+
+  p{
+    font-size: 16px;
+  }
+}
