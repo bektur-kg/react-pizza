@@ -1,7 +1,12 @@
 import {categories} from "../../utils/categories";
 import React from 'react'
 
-const Categories = ({categoryId, onClickCategory}) => {
+type CategoriesProps = {
+	categoryId: number;
+	onClickCategory: (index: number) => void;
+}
+
+const Categories: React.FC<CategoriesProps> = ({categoryId, onClickCategory}) => {
 
 	return (
 		<div className="categories">

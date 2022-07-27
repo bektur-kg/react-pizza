@@ -3,7 +3,7 @@ import {BiErrorAlt} from "react-icons/bi";
 import cls from "./NotFoundBlock.module.scss";
 
 
-const NotFoundBlock = () => {
+const NotFoundBlock: React.FC = () => {
 	return (
 		<div className={cls.root}>
 			<span><BiErrorAlt/></span>

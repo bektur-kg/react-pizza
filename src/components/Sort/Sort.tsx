@@ -1,28 +1,46 @@
 import React from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {setSortType} from "../../redux/slices/filterSlice";
+import {FilterSortSelect, setSortType, TSortSlice} from "../../redux/slices/filterSlice";
+
+type PopupClick = MouseEvent & {
+	path: Node[]
+}
+
+export const sortTypes: TSortSlice[] = [
+	{span: 'популярности (ASC)', sortProperty: 'rating'},
+	{span: 'популярности (DESC)', sortProperty: '-rating'},
+	{span: 'цене (ASC)', sortProperty: 'price'},
+	{span: 'цене (DESC)', sortProperty: '-price'},
+	{span: 'алфавиту (ASC)', sortProperty: 'title'},
+	{span: 'алфавиту (DESC)', sortProperty: '-title'}
+]
 
 const Sort = () => {
 	const [isVisible, setIsVisible] = React.useState(false)
 	const dispatch = useDispatch()
-	const sort = useSelector(state => state.filter.sort)
+	const sort = useSelector(FilterSortSelect)
+	const sortRef = React.useRef<HTMLDivElement>(null)
 
-	const sortTypes = [
-		{span: 'популярности (ASC)', sortProperty: 'rating'},
-		{span: 'популярности (DESC)', sortProperty: '-rating'},
-		{span: 'цене (ASC)', sortProperty: 'price'},
-		{span: 'цене (DESC)', sortProperty: '-price'},
-		{span: 'алфавиту (ASC)', sortProperty: 'title'},
-		{span: 'алфавиту (DESC)', sortProperty: '-title'}
-	]
-
-	const onClickSortHandle = obj => {
+	const onClickSortHandle = (obj: TSortSlice) => {
 		dispatch(setSortType(obj))
 		setIsVisible(false)
 	}
 
+	React.useEffect(() => {
+		const handleClickOutside = (e: MouseEvent) => {
+			const _event = e as PopupClick
+
+			if (sortRef.current && !_event.path.includes(sortRef.current)){
+				setIsVisible(false)
+			}
+		}
+
+		document.body.addEventListener('click', handleClickOutside)
+		return () => document.body.removeEventListener('click', handleClickOutside )
+	}, [])
+
 	return (
-		<div className="sort">
+		<div className="sort" ref={sortRef}>
 			<div className="sort__label">
 				<svg
 					width="10"
@@ -49,7 +67,7 @@ const Sort = () => {
 								<li
 									key={index}
 									className={sort.sortProperty === obj.sortProperty ? 'active' : ''}
-									onClick={() => onClickSortHandle(obj) }
+									onClick={() => onClickSortHandle(obj)}
 								>{obj.span}</li>
 							))
 						}
